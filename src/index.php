@@ -45,9 +45,13 @@ class Cpf
     return boolval(preg_match(Self::REGEX, $cpf));
   }
 
-  public static function format(string $cpf): string
+  public static function format(string $cpf)
   {
     $clean_cpf = Self::clean_up($cpf);
+    if (strlen($clean_cpf) !== 11) {
+      return null;
+    }
+
     return preg_replace("/^(\d{3})(\d{3})(\d{3})(\d{2})$/", "$1.$2.$3-$4", $clean_cpf);
   }
 
