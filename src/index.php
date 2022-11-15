@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Enricky\Cpf;
+
 class Cpf
 {
   const REGEX = "/^(\d{3})\.(\d{3})\.(\d{3})-(\d{2})$/";
@@ -10,12 +12,12 @@ class Cpf
   {
     do {
       $cpf_number = rand(100000000, 999999999);
-      $cpf_string = (string)$cpf_number;
+      $cpf_string = strval($cpf_number);
     } while (Cpf::is_sequence($cpf_string));
 
     $first_digit = Self::create_digit($cpf_string);
     $second_digit = Self::create_digit($cpf_string . $first_digit);
-    return $cpf_string . $first_digit . $second_digit;
+    return Cpf::format($cpf_string . $first_digit . $second_digit);
   }
 
   public static function validate(string $cpf): bool
@@ -38,9 +40,9 @@ class Cpf
     return $clean_cpf === $new_cpf;
   }
 
-  public static function validate_format(string $cpf)
+  public static function validate_format(string $cpf): bool
   {
-    return preg_match(Self::REGEX, $cpf);
+    return boolval(preg_match(Self::REGEX, $cpf));
   }
 
   public static function format(string $cpf): string
@@ -62,7 +64,7 @@ class Cpf
     //multiplicator utilza a referência para ser possível alterar a variavel original dentro da função
     $cpf_array = array_map(function (string $digit) use (&$multiplicator) {
       $multiplicator--;
-      return (int)$digit * $multiplicator;
+      return intval($digit) * $multiplicator;
     }, $cpf_array);
 
     $total = array_reduce($cpf_array, fn(int $count, int $number) => $count + $number, 0);

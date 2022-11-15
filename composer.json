@@ -1,0 +1,19 @@
+{
+    "name": "enricky/cpf",
+    "description": "Gerador, validador e gerenciador de CPF's para PHP",
+    "type": "library",
+    "require-dev": {
+        "pestphp/pest": "^1.22"
+    },
+    "authors": [
+        {
+            "name": "Enricky Hipólito",
+            "email": "enricky.hipolito@gmail.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": false
+        }
+    }
+}
