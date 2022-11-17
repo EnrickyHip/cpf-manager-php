@@ -21,7 +21,6 @@ dataset('invalid_formats', function () {
 
 dataset('non_11_digits', function () {
   return [
-    "9655638600",
     "999999",
     "aaaa",
     "2384729834",

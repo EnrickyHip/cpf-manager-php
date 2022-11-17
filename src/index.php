@@ -8,6 +8,11 @@ class Cpf
 {
   const REGEX = "/^(\d{3})\.(\d{3})\.(\d{3})-(\d{2})$/";
 
+  /**
+   * Gera um CPF válido.
+   * @return string cpf no formato: 999.999.999-99.
+   */
+
   public static function generate(): string
   {
     do {
@@ -19,6 +24,13 @@ class Cpf
     $second_digit = Self::create_digit($cpf_string . $first_digit);
     return Cpf::format($cpf_string . $first_digit . $second_digit);
   }
+  
+  /**
+   * Checa validade de um CPF.
+   * @param string $cpf Cpf a ser validado. O CPF obrigatoriamente precisa estar no formato: 123.123.123-12 ou
+   * 12312312312. Mesmo que os dígitos sejam válidos, caso a string não esteja nesses formatos, o retorno será falso.
+   * @return bool `true` se o CPF for válido ou `false` caso não seja.
+   */
 
   public static function validate(string $cpf): bool
   {
@@ -40,12 +52,27 @@ class Cpf
     return $clean_cpf === $new_cpf;
   }
 
+  /**
+   * Checa se o formato do cpf enviado corresponde com o formato tradicional de CPF's: 999.999.999-99
+   * @param string $cpf CPF a ser checado.
+   * @return bool `true` se o formato corresponder ou `false` caso não.
+   */
+
   public static function validate_format(string $cpf): bool
   {
     return boolval(preg_match(Self::REGEX, $cpf));
   }
 
-  public static function format(string $cpf)
+  /**
+   * Formata um CPF no formato: 999.999.999-99.
+   * @param string $cpf CPF a ser formatado. Esse parâmetro é extremamente livre,
+   * pois a função filtra tudo que não for dígito.
+   * @return string|null O CPF formatado. Caso não seja possível formatar o cpf por não possuir a quantidade
+   * necessária de caracteres, o retorno será `null`
+   *
+   */
+
+  public static function format(string $cpf): string | null
   {
     $clean_cpf = Self::clean_up($cpf);
     if (strlen($clean_cpf) !== 11) {
@@ -54,6 +81,14 @@ class Cpf
 
     return preg_replace("/^(\d{3})(\d{3})(\d{3})(\d{2})$/", "$1.$2.$3-$4", $clean_cpf);
   }
+
+  /**
+   * Remove todo tipo de caractere que não seja um dígito.
+   * @param string $cpf CPF a ser limpado.
+   * @return string O CPF com apenas dígitos.
+   *
+   * ex: 123.123.123-12 --> 12312312312
+   */
 
   public static function clean_up(string $cpf): string
   {

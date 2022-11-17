@@ -1,6 +1,7 @@
 {
     "name": "enricky/cpf",
     "description": "Gerador, validador e gerenciador de CPF's para PHP",
+    "version": "1.0.0",
     "type": "library",
     "require-dev": {
         "pestphp/pest": "^1.22"
@@ -15,5 +16,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": false
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/pest"
     }
 }

@@ -6,7 +6,7 @@ require_once __DIR__ . "/../src/index.php";
 
 use Enricky\Cpf\Cpf;
 
-//*validate_format
+//* validate_format
 
 it("should validate format", function (string $cpf) {
   expect(Cpf::validate_format($cpf))->toBeTrue();
@@ -16,7 +16,7 @@ it("should not validate format", function (string $cpf) {
   expect(Cpf::validate_format($cpf))->toBeFalse();
 })->with("invalid_formats");
 
-//*generate
+//* generate
 
 it("should generate cpf with valid format", function () {
   for ($i = 0; $i < 15; $i++) {
@@ -54,7 +54,7 @@ it("should validate cpfs", function (string $cpf) {
   expect(Cpf::validate($cpf))->toBeTrue();
 })->with("valid_cpfs");
 
-//format
+//* format
 
 it("should return null if is not possible to format cpf", function (string $cpf) {
   expect(Cpf::format($cpf))->toBeNull();
@@ -73,7 +73,7 @@ it("should format not formated cpfs and validate it", function (string $cpf) {
   expect(Cpf::validate($formated_cpf))->toBeTrue();
 })->with("valid_but_not_formated_cpfs");
 
-// clean_up
+//* clean_up
 
 it("should clean up cpf", function () {
   expect(Cpf::clean_up("273.032.394-56"))->toBe("27303239456");
