@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . "/../src/index.php";
+require_once __DIR__ . "/../vendor/autoload.php";
 
-use Enricky\Cpf\Cpf;
+use Enricky\CpfManager\Cpf;
 
 //* validate_format
 

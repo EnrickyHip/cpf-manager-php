@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Enricky\Cpf;
+namespace Enricky\CpfManager;
 
 class Cpf
 {
@@ -72,7 +72,7 @@ class Cpf
    *
    */
 
-  public static function format(string $cpf): string | null
+  public static function format(string $cpf)
   {
     $clean_cpf = Self::clean_up($cpf);
     if (strlen($clean_cpf) !== 11) {
@@ -121,3 +121,4 @@ class Cpf
     return $sequence === $cpf;
   }
 }
+
