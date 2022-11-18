@@ -9,7 +9,7 @@ $ composer require enricky/cpf-manager
 
 ## Utilização
 ```php
-require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "./vendor/autoload.php";
 use Enricky\CpfManager\Cpf;
 ```
 
