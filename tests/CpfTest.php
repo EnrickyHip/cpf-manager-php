@@ -6,14 +6,14 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use Enricky\CpfManager\Cpf;
 
-//* validate_format
+//* validateFormat
 
 it("should validate format", function (string $cpf) {
-  expect(Cpf::validate_format($cpf))->toBeTrue();
+  expect(Cpf::validateFormat($cpf))->toBeTrue();
 })->with(["000.000.000-00", "999.999.999-99"]);
 
 it("should not validate format", function (string $cpf) {
-  expect(Cpf::validate_format($cpf))->toBeFalse();
+  expect(Cpf::validateFormat($cpf))->toBeFalse();
 })->with("invalid_formats");
 
 //* generate
@@ -21,7 +21,7 @@ it("should not validate format", function (string $cpf) {
 it("should generate cpf with valid format", function () {
   for ($i = 0; $i < 15; $i++) {
     $cpf = Cpf::generate();
-    expect(Cpf::validate_format($cpf))->toBeTrue();
+    expect(Cpf::validateFormat($cpf))->toBeTrue();
   }
 });
 
@@ -69,16 +69,16 @@ it("should format cpf", function () {
 
 it("should format not formated cpfs and validate it", function (string $cpf) {
   $formated_cpf = Cpf::format($cpf);
-  expect(Cpf::validate_format($formated_cpf))->toBeTrue();
+  expect(Cpf::validateFormat($formated_cpf))->toBeTrue();
   expect(Cpf::validate($formated_cpf))->toBeTrue();
 })->with("valid_but_not_formated_cpfs");
 
-//* clean_up
+//* cleanUp
 
 it("should clean up cpf", function () {
-  expect(Cpf::clean_up("273.032.394-56"))->toBe("27303239456");
-  expect(Cpf::clean_up("649.98136054"))->toBe("64998136054");
-  expect(Cpf::clean_up("652-809-610-43"))->toBe("65280961043");
-  expect(Cpf::clean_up("289 asasa88a  sassa7.56as002"))->toBe("28988756002");
+  expect(Cpf::cleanUp("273.032.394-56"))->toBe("27303239456");
+  expect(Cpf::cleanUp("649.98136054"))->toBe("64998136054");
+  expect(Cpf::cleanUp("652-809-610-43"))->toBe("65280961043");
+  expect(Cpf::cleanUp("289 asasa88a  sassa7.56as002"))->toBe("28988756002");
 });
 

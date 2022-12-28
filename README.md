@@ -41,16 +41,16 @@ echo $cpfFormatado; // 147.001.216-29
 ## Valide o formato de um CPF
 
 ```php
-$formatoValido = Cpf::validate_format('147.001.216-29');
+$formatoValido = Cpf::validateFormat('147.001.216-29');
 var_dump($formatoValido); //bool(true)
 
-$formatoInvalido = Cpf::validate_format('147-001-216-29');
+$formatoInvalido = Cpf::validateFormat('147-001-216-29');
 var_dump($formatoInvalido); //bool(false)
 ```
 
 ## Limpe um CPF
 
 ```php
-$cpfLimpo = Cpf::clean_up('147.001.216-29');
+$cpfLimpo = Cpf::cleanUp('147.001.216-29');
 echo $cpfLimpo; // 14700121629
 ```

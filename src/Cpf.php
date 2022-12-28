@@ -16,13 +16,13 @@ class Cpf
   public static function generate(): string
   {
     do {
-      $cpf_number = rand(100000000, 999999999);
-      $cpf_string = strval($cpf_number);
-    } while (Cpf::is_sequence($cpf_string));
+      $cpfNumber = rand(100000000, 999999999);
+      $cpfString = strval($cpfNumber);
+    } while (Cpf::isSequence($cpfString));
 
-    $first_digit = Self::create_digit($cpf_string);
-    $second_digit = Self::create_digit($cpf_string . $first_digit);
-    return Cpf::format($cpf_string . $first_digit . $second_digit);
+    $firstDigit = Self::createDigit($cpfString);
+    $secondDigit = Self::createDigit($cpfString . $firstDigit);
+    return Cpf::format($cpfString . $firstDigit . $secondDigit);
   }
   
   /**
@@ -34,22 +34,22 @@ class Cpf
 
   public static function validate(string $cpf): bool
   {
-    $just_numbers_regex = "/^\d{11}$/";
-    if (!preg_match($just_numbers_regex, $cpf) && !Self::validate_format($cpf)) {
+    $justNumbersRegex = "/^\d{11}$/";
+    if (!preg_match($justNumbersRegex, $cpf) && !Self::validateFormat($cpf)) {
       return false;
     }
 
-    $clean_cpf = Self::clean_up($cpf);
-    if (strlen($clean_cpf) !== 11 || Cpf::is_sequence($clean_cpf)) {
+    $cleanCpf = Self::cleanUp($cpf);
+    if (strlen($cleanCpf) !== 11 || Cpf::isSequence($cleanCpf)) {
       return false;
     }
 
-    $partial_cpf = substr($clean_cpf, 0, -2);
-    $first_digit = Self::create_digit($partial_cpf);
-    $second_digit = Self::create_digit($partial_cpf . $first_digit);
+    $partialCpf = substr($cleanCpf, 0, -2);
+    $firstDigit = Self::createDigit($partialCpf);
+    $secondDigit = Self::createDigit($partialCpf . $firstDigit);
 
-    $new_cpf = $partial_cpf . $first_digit . $second_digit;
-    return $clean_cpf === $new_cpf;
+    $newCpf = $partialCpf . $firstDigit . $secondDigit;
+    return $cleanCpf === $newCpf;
   }
 
   /**
@@ -58,7 +58,7 @@ class Cpf
    * @return bool `true` se o formato corresponder ou `false` caso não.
    */
 
-  public static function validate_format(string $cpf): bool
+  public static function validateFormat(string $cpf): bool
   {
     return boolval(preg_match(Self::REGEX, $cpf));
   }
@@ -72,14 +72,14 @@ class Cpf
    *
    */
 
-  public static function format(string $cpf)
+  public static function format(string $cpf): string | null
   {
-    $clean_cpf = Self::clean_up($cpf);
-    if (strlen($clean_cpf) !== 11) {
+    $cleanCpf = Self::cleanUp($cpf);
+    if (strlen($cleanCpf) !== 11) {
       return null;
     }
 
-    return preg_replace("/^(\d{3})(\d{3})(\d{3})(\d{2})$/", "$1.$2.$3-$4", $clean_cpf);
+    return preg_replace("/^(\d{3})(\d{3})(\d{3})(\d{2})$/", "$1.$2.$3-$4", $cleanCpf);
   }
 
   /**
@@ -90,23 +90,23 @@ class Cpf
    * ex: 123.123.123-12 --> 12312312312
    */
 
-  public static function clean_up(string $cpf): string
+  public static function cleanUp(string $cpf): string
   {
     return preg_replace("/\D+/", "", $cpf);
   }
 
-  private static function create_digit(string $partial_cpf): string
+  private static function createDigit(string $partialCpf): string
   {
-    $cpf_array = str_split($partial_cpf);
-    $multiplicator = count($cpf_array) + 2;
+    $cpfArray = str_split($partialCpf);
+    $multiplicator = count($cpfArray) + 2;
     
     //multiplicator utilza a referência para ser possível alterar a variavel original dentro da função
-    $cpf_array = array_map(function (string $digit) use (&$multiplicator) {
+    $cpfArray = array_map(function (string $digit) use (&$multiplicator) {
       $multiplicator--;
       return intval($digit) * $multiplicator;
-    }, $cpf_array);
+    }, $cpfArray);
 
-    $total = array_reduce($cpf_array, fn(int $count, int $number) => $count + $number, 0);
+    $total = array_reduce($cpfArray, fn(int $count, int $number) => $count + $number, 0);
 
     $digit = 11 - ($total % 11);
     if ($digit > 9) {
@@ -115,7 +115,7 @@ class Cpf
     return strval($digit);
   }
 
-  private static function is_sequence(string $cpf): bool
+  private static function isSequence(string $cpf): bool
   {
     $sequence = str_repeat($cpf[0], strlen($cpf));
     return $sequence === $cpf;
