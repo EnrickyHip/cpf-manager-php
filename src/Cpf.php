@@ -15,16 +15,21 @@ class Cpf
 
   public static function generate(): string
   {
+    $cpfString = "";
+
     do {
-      $cpfNumber = rand(100000000, 999999999);
-      $cpfString = strval($cpfNumber);
+      $cpfString = "";
+      for ($i = 0; $i < 9; $i++) {
+        $cpfNumber = rand(0, 9);
+        $cpfString .= (string)$cpfNumber;
+      }
     } while (Cpf::isSequence($cpfString));
 
-    $firstDigit = Self::createDigit($cpfString);
-    $secondDigit = Self::createDigit($cpfString . $firstDigit);
-    return Cpf::format($cpfString . $firstDigit . $secondDigit);
+    $firstDigit = self::createDigit($cpfString);
+    $secondDigit = self::createDigit($cpfString . $firstDigit);
+    return (string)Cpf::format($cpfString . $firstDigit . $secondDigit);
   }
-  
+
   /**
    * Checa validade de um CPF.
    * @param string $cpf Cpf a ser validado. O CPF obrigatoriamente precisa estar no formato: 123.123.123-12 ou
@@ -35,18 +40,18 @@ class Cpf
   public static function validate(string $cpf): bool
   {
     $justNumbersRegex = "/^\d{11}$/";
-    if (!preg_match($justNumbersRegex, $cpf) && !Self::validateFormat($cpf)) {
+    if (!preg_match($justNumbersRegex, $cpf) && !self::validateFormat($cpf)) {
       return false;
     }
 
-    $cleanCpf = Self::cleanUp($cpf);
+    $cleanCpf = self::cleanUp($cpf);
     if (strlen($cleanCpf) !== 11 || Cpf::isSequence($cleanCpf)) {
       return false;
     }
 
     $partialCpf = substr($cleanCpf, 0, -2);
-    $firstDigit = Self::createDigit($partialCpf);
-    $secondDigit = Self::createDigit($partialCpf . $firstDigit);
+    $firstDigit = self::createDigit($partialCpf);
+    $secondDigit = self::createDigit($partialCpf . $firstDigit);
 
     $newCpf = $partialCpf . $firstDigit . $secondDigit;
     return $cleanCpf === $newCpf;
@@ -60,7 +65,7 @@ class Cpf
 
   public static function validateFormat(string $cpf): bool
   {
-    return boolval(preg_match(Self::REGEX, $cpf));
+    return (bool)preg_match(self::REGEX, $cpf);
   }
 
   /**
@@ -74,7 +79,7 @@ class Cpf
 
   public static function format(string $cpf): string | null
   {
-    $cleanCpf = Self::cleanUp($cpf);
+    $cleanCpf = self::cleanUp($cpf);
     if (strlen($cleanCpf) !== 11) {
       return null;
     }
@@ -98,21 +103,19 @@ class Cpf
   private static function createDigit(string $partialCpf): string
   {
     $cpfArray = str_split($partialCpf);
-    $multiplicator = count($cpfArray) + 2;
-    
-    //multiplicator utilza a referência para ser possível alterar a variavel original dentro da função
-    $cpfArray = array_map(function (string $digit) use (&$multiplicator) {
-      $multiplicator--;
-      return intval($digit) * $multiplicator;
-    }, $cpfArray);
+    $multiplier = (int)count($cpfArray) + 1;
+    $total = 0;
 
-    $total = array_reduce($cpfArray, fn(int $count, int $number) => $count + $number, 0);
+    foreach ($cpfArray as $digit) {
+      $total += (int)$digit * $multiplier;
+      $multiplier--;
+    }
 
     $digit = 11 - ($total % 11);
     if ($digit > 9) {
       $digit = 0;
     }
-    return strval($digit);
+    return (string)$digit;
   }
 
   private static function isSequence(string $cpf): bool
@@ -121,4 +124,3 @@ class Cpf
     return $sequence === $cpf;
   }
 }
-

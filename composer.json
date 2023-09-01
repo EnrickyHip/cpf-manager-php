@@ -1,7 +1,7 @@
 {
     "name": "enricky/cpf-manager",
     "description": "Gerador, validador e gerenciador de CPF's para PHP",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "type": "library",
     "require-dev": {
         "pestphp/pest": "^1.22"
